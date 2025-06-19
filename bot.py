@@ -1,8 +1,9 @@
 import discord
+import os
 from discord.ext import commands
 
 # Your bot token here
-TOKEN = 'YOUR_BOT_TOKEN'
+TOKEN = os.environ['DISCORD_BOT_TOKEN']
 
 # Intents (required for Discord.py 2.x)
 intents = discord.Intents.default()
