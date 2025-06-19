@@ -15,10 +15,10 @@ bot = commands.Bot(command_prefix='!', intents=intents)
 # Simple in-memory state
 user_states = {}
 
-@bot.command(name='cpe')
-async def cpe(ctx):
+@bot.command(name='cpe', description='Request CPE certificate')
+async def cpe(interaction: discord.Interaction):
     user_states[ctx.author.id] = {'step': 'name'}
-    await ctx.send("What is your full name?")
+    await interaction.response.send_message("What is your full name?")
 
 @bot.event
 async def on_message(message):
