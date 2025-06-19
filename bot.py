@@ -17,7 +17,7 @@ user_states = {}
 @bot.command(name='cpe')
 async def cpe(ctx):
     user_states[ctx.author.id] = {'step': 'name'}
-    await ctx.send("What is your full name for the certificate?")
+    await ctx.send("What is your full name?")
 
 @bot.event
 async def on_message(message):
@@ -33,7 +33,7 @@ async def on_message(message):
         if state['step'] == 'name':
             state['name'] = message.content.strip()
             state['step'] = 'events'
-            await message.channel.send("Which events did you attend? Please list event codes separated by commas (e.g. 0x01, 0x02)")
+            await message.channel.send("Which events did you attend? Please separated by comma (e.g. 0x01, 0x02)")
         
         # Step 2: Get Events
         elif state['step'] == 'events':
