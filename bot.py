@@ -1,9 +1,11 @@
 import discord
 import os
 from discord.ext import commands
-from generate_certificate import generate_certificate
+from certificate_generator import generate_certificate
+from dotenv import load_dotenv
 
-TOKEN = os.environ['DISCORD_BOT_TOKEN']
+load_dotenv()  # This will read .env file and set os.environ
+TOKEN = os.getenv('DISCORD_BOT_TOKEN')
 
 intents = discord.Intents.default()
 intents.messages = True
