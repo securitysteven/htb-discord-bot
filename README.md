@@ -1,17 +1,13 @@
-# Conversation Flow:
+This bot provides certificate of attendence with matching CPE credits for each event.
+Our events are accredit for 3 CPE per event.
+Each event takes over 3 hours.
 
-1️⃣ User: /cpe or !cpe
+## Conversation Flow:
 
-2️⃣ Bot: “Hi! What is your full name for the certificate?”
+1️⃣ User: /cpe name:Sophie events:0x02, 0x03, 0x0A
 
-3️⃣ User: John Doe
-
-4️⃣ Bot: “Which events did you attend? Please list the event codes separated by commas (e.g. 0x01, 0x02)”
-
-5️⃣ User: 0x01, 0x02, 0x05
-
-6️⃣ Bot: “Thank you! Generating your certificates for 3 events (9 CPE credits)…”
+6️⃣ Bot: “Thank you Sophie! Generating your certificates for 3 events (9 CPE credits)…”
 (generates certificate)
 
-7️⃣ Bot: “Here is your certificate, John Doe. If you need another, just type /cpe again!”
+7️⃣ Bot: “Here is your certificate, Sophie. If you need another, just type /cpe again!”
 (posts PDF or image)
