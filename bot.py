@@ -27,7 +27,7 @@ async def main():
         ),
     ):
         """Receive a CPE for your HTB attendance."""
-        await inter.send(f"Hello {name}, you attended {events}")
+        await inter.send(f"Hello {name}, you attended {events}", ephemeral=True)
 
     await bot.start(os.environ["TOKEN"])
 
