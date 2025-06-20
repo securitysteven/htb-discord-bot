@@ -15,7 +15,10 @@ async def main():
     async def on_ready():
         print(f"{bot.user} has connected to Discord!")
 
-    @bot.slash_command(name="cpe")
+    @bot.slash_command(
+        name="cpe",
+        default_member_permissions=disnake.Permissions(manage_guild=True),
+    )
     async def cpe(
         inter: disnake.GuildCommandInteraction,
         name: str = commands.Param(
