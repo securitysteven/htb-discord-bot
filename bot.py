@@ -31,8 +31,16 @@ async def main():
     ):
         """Receive a CPE for your HTB attendance."""
         await inter.response.defer(ephemeral=True)
-        # Generate certificates here
-        await inter.send(f"Hello {name}, you attended {events}", ephemeral=True)
+        
+        # Feedback on input
+        events_list = [e.strip() for e in events.split(',')]
+        num_events = len(events_list)
+        credits = num_events * 3
+
+        await inter.send(
+            f"Hello {name}, you attended {events}.\n"
+            f"Generating your certificates for {num_events} events ({credits} CPE credits)…",
+            ephemeral=True)
 
     await bot.start(os.environ["TOKEN"])
 
