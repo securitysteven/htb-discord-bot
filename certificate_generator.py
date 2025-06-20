@@ -2,6 +2,7 @@ from reportlab.lib.pagesizes import A4
 from reportlab.pdfgen import canvas
 import io
 
+
 def generate_certificate(name, events, credits):
     # In-memory PDF buffer
     buffer = io.BytesIO()

@@ -1,60 +1,36 @@
-import discord
+import asyncio
 import os
-from discord.ext import commands
-from certificate_generator import generate_certificate
+
+import disnake
+from disnake.ext import commands
 from dotenv import load_dotenv
 
-load_dotenv()  # This will read .env file and set os.environ
-TOKEN = os.getenv('DISCORD_BOT_TOKEN')
+load_dotenv()
 
-intents = discord.Intents.default()
-intents.messages = True
 
-bot = commands.Bot(command_prefix='!', intents=intents)
+async def main():
+    bot = commands.InteractionBot()
 
-user_states = {}
+    @bot.event
+    async def on_ready():
+        print(f"{bot.user} has connected to Discord!")
 
-@bot.command(name='cpe', description='Request CPE certificate')
-async def cpe(ctx):
-    user_states[ctx.author.id] = {'step': 'name'}
-    await ctx.send("What is your full name?")
+    @bot.slash_command(name="cpe")
+    async def cpe(
+        inter: disnake.GuildCommandInteraction,
+        name: str = commands.Param(
+            name="name", description="Please provide your full name"
+        ),
+        events: str = commands.Param(
+            name="events",
+            description="Please provide the events you have attended seperated by comma (Eg 0x01, 0x02)",
+        ),
+    ):
+        """Receive a CPE for your HTB attendance."""
+        await inter.send(f"Hello {name}, you attended {events}")
 
-@bot.event
-async def on_message(message):
-    if message.author == bot.user:
-        return
+    await bot.start(os.environ["TOKEN"])
 
-    user_id = message.author.id
 
-    if user_id in user_states:
-        state = user_states[user_id]
-
-        if state['step'] == 'name':
-            state['name'] = message.content.strip()
-            state['step'] = 'events'
-            await message.channel.send("Which events did you attend? Please separate by comma (e.g. 0x01, 0x02)")
-
-        elif state['step'] == 'events':
-            events = [e.strip() for e in message.content.split(',')]
-            num_events = len(events)
-            credits = num_events * 3
-            state['events'] = events
-            state['credits'] = credits
-
-            await message.channel.send(
-                f"Thank you, {state['name']}! Generating your certificate for {num_events} events ({credits} CPE credits)..."
-            )
-
-            # Generate PDF
-            pdf_buffer = generate_certificate(state['name'], state['events'], state['credits'])
-
-            # Send PDF
-            file = discord.File(fp=pdf_buffer, filename="certificate.pdf")
-            await message.channel.send("Here is your certificate!", file=file)
-
-            # Clear state
-            del user_states[user_id]
-
-    await bot.process_commands(message)
-
-bot.run(TOKEN)
+if __name__ == "__main__":
+    asyncio.run(main())
