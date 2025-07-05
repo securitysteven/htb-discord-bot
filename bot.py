@@ -4,9 +4,9 @@ import os
 import disnake
 from disnake.ext import commands
 from dotenv import load_dotenv
+from certificate_generator import generate_certificate
 
 load_dotenv()
-
 
 async def main():
     bot = commands.InteractionBot()
@@ -32,15 +32,21 @@ async def main():
         """Receive a CPE for your HTB attendance."""
         await inter.response.defer(ephemeral=True)
         
-        # Feedback on input
+
         events_list = [e.strip() for e in events.split(',')]
         num_events = len(events_list)
-        credits = num_events * 3
+        credits = num_events * 3  # Each event is 3 credits
 
         await inter.send(
-            f"Hello {name}, you attended {events}.\n"
-            f"Generating your certificates for {num_events} events ({credits} CPE credits)…",
-            ephemeral=True)
+            f"Hello {name}, you attended {num_events} events: {', '.join(events_list)}.\n"
+            f"Generating your certificates ({credits} CPE credits per event)…",
+            ephemeral=True
+        )
+
+        # Generate certificate
+        pdf_buffer = generate_certificate(name=name, events=events_list, credits=credits)
+        file = disnake.File(fp=pdf_buffer, filename=f"{name.replace(' ', '_')}_certificate_of_attendance.pdf")
+        await inter.send("Here is your certificate:", file=file, ephemeral=True)
 
     await bot.start(os.environ["TOKEN"])
 
