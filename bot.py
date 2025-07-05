@@ -35,7 +35,7 @@ async def main():
 
         events_list = [e.strip() for e in events.split(',')]
         num_events = len(events_list)
-        credits = num_events * 3  # Each event is 3 credits
+        credits = 3  # Each event is 3 credits
 
         await inter.send(
             f"Hello {name}, you attended {num_events} events: {', '.join(events_list)}.\n"
