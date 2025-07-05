@@ -44,9 +44,13 @@ async def main():
         )
 
         # Generate certificate
-        pdf_buffer = generate_certificate(name=name, events=events_list, credits=credits)
-        file = disnake.File(fp=pdf_buffer, filename=f"{name.replace(' ', '_')}_certificate_of_attendance.pdf")
-        await inter.send("Here is your certificate:", file=file, ephemeral=True)
+        files = []
+        for event in events_list:
+            pdf_buffer = generate_certificate(name=name, events=[event], credits=credits)
+            filename = f"{name.replace(' ', '_')}_{event}_certificate_of_attendance.pdf"
+            files.append(disnake.File(fp=pdf_buffer, filename=filename))
+
+        await inter.send(content="Here are your certificates:", files=files, ephemeral=True)
 
     await bot.start(os.environ["TOKEN"])
 
